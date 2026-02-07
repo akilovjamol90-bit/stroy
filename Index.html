@@ -26,4 +26,28 @@
     }
   </script>
 </body>
+
 </html>
+<h2>Ежедневный отчет</h2>
+<form onsubmit="sendReport(event)">
+  <label>Раздел: <input type="text" id="section"></label><br>
+  <label>Вид работ: <input type="text" id="work"></label><br>
+  <label>Объем: <input type="text" id="volume"></label><br>
+  <label>Ресурсы: <input type="text" id="resources"></label><br>
+  <label>Техника: <input type="text" id="machines"></label><br>
+  <button type="submit">Отправить отчет</button>
+</form>
+
+<script>
+  function sendReport(event) {
+    event.preventDefault();
+    const data = {
+      section: document.getElementById("section").value,
+      work: document.getElementById("work").value,
+      volume: document.getElementById("volume").value,
+      resources: document.getElementById("resources").value,
+      machines: document.getElementById("machines").value
+    };
+    Telegram.WebApp.sendData(JSON.stringify(data));
+  }
+</script>
