@@ -6,48 +6,86 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body { font-family: Arial; background: #f0f0f0; padding: 20px; }
-    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+    h1, h2 { color: #333; }
+    select, input, button { margin: 10px 0; padding: 8px; font-size: 16px; }
+    form { margin-top: 20px; background: #fff; padding: 15px; border-radius: 8px; }
   </style>
 </head>
 <body>
   <h1>Строй-Контроль: TMA</h1>
-  <button onclick="sendReport()">Ежедневный отчет</button>
-  <button onclick="sendSupply()">Заявка на материалы</button>
+
+  <!-- Выбор проекта -->
+  <h2>Выберите проект</h2>
+  <select id="projectSelect" onchange="showForms()">
+    <option value="">-- выберите --</option>
+    <option value="project1">ЮЖ</option>
+    <option value="project2">Север</option>
+    <option value="project3">Центр</option>
+  </select>
+
+  <!-- Форма Ежедневный отчет -->
+  <div id="reportForm" style="display:none;">
+    <h2>Ежедневный отчет</h2>
+    <form onsubmit="sendReport(event)">
+      <label>Раздел: <input type="text" id="section"></label><br>
+      <label>Вид работ: <input type="text" id="work"></label><br>
+      <label>Объем: <input type="text" id="volume"></label><br>
+      <label>Ресурсы: <input type="text" id="resources"></label><br>
+      <label>Техника: <input type="text" id="machines"></label><br>
+      <button type="submit">Отправить отчет</button>
+    </form>
+  </div>
+
+  <!-- Форма Заявка на материалы -->
+  <div id="supplyForm" style="display:none;">
+    <h2>Заявка на материалы</h2>
+    <form onsubmit="sendSupply(event)">
+      <label>Материал: <input type="text" id="material"></label><br>
+      <label>Количество: <input type="number" id="quantity"></label><br>
+      <label>Дата: <input type="date" id="date"></label><br>
+      <label>Объект: <input type="text" id="object"></label><br>
+      <button type="submit">Отправить заявку</button>
+    </form>
+  </div>
 
   <script>
     Telegram.WebApp.ready();
 
-    function sendReport() {
-      Telegram.WebApp.sendData("Ежедневный отчет отправлен!");
+    function showForms() {
+      const project = document.getElementById("projectSelect").value;
+      if (project) {
+        document.getElementById("reportForm").style.display = "block";
+        document.getElementById("supplyForm").style.display = "block";
+      } else {
+        document.getElementById("reportForm").style.display = "none";
+        document.getElementById("supplyForm").style.display = "none";
+      }
     }
 
-    function sendSupply() {
-      Telegram.WebApp.sendData("Заявка на материалы отправлена!");
+    function sendReport(event) {
+      event.preventDefault();
+      const data = {
+        project: document.getElementById("projectSelect").value,
+        section: document.getElementById("section").value,
+        work: document.getElementById("work").value,
+        volume: document.getElementById("volume").value,
+        resources: document.getElementById("resources").value,
+        machines: document.getElementById("machines").value
+      };
+      Telegram.WebApp.sendData(JSON.stringify(data));
+    }
+
+    function sendSupply(event) {
+      event.preventDefault();
+      const data = {
+        project: document.getElementById("projectSelect").value,
+        material: document.getElementById("material").value,
+        quantity: document.getElementById("quantity").value,
+        date: document.getElementById("date").value,
+        object: document.getElementById("object").value
+      };
+      Telegram.WebApp.sendData(JSON.stringify(data));
     }
   </script>
 </body>
 </html>
-<h2>Ежедневный отчет</h2>
-<form onsubmit="sendReport(event)">
-  <label>Раздел: <input type="text" id="section"></label><br>
-  <label>Вид работ: <input type="text" id="work"></label><br>
-  <label>Объем: <input type="text" id="volume"></label><br>
-  <label>Ресурсы: <input type="text" id="resources"></label><br>
-  <label>Техника: <input type="text" id="machines"></label><br>
-  <button type="submit">Отправить отчет</button>
-</form>
-
-<script>
-  function sendReport(event) {
-    event.preventDefault();
-    const data = {
-      section: document.getElementById("section").value,
-      work: document.getElementById("work").value,
-      volume: document.getElementById("volume").value,
-      resources: document.getElementById("resources").value,
-      machines: document.getElementById("machines").value
-    };
-    Telegram.WebApp.sendData(JSON.stringify(data));
-  }
-</script>
-
