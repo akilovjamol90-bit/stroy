@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Строй-Контроль: TMA</title>
+  <meta charset="UTF-8">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { font-family: Arial; background: #f0f0f0; padding: 20px; }
+    button { margin: 10px; padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Строй-Контроль: TMA</h1>
+  <button onclick="sendReport()">Ежедневный отчет</button>
+  <button onclick="sendSupply()">Заявка на материалы</button>
+
+  <script>
+    Telegram.WebApp.ready();
+
+    function sendReport() {
+      Telegram.WebApp.sendData("Ежедневный отчет отправлен!");
+    }
+
+    function sendSupply() {
+      Telegram.WebApp.sendData("Заявка на материалы отправлена!");
+    }
+  </script>
+</body>
+</html>
